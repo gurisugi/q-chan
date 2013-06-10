@@ -89,11 +89,16 @@ AnySan->register_listener(
             }
             elsif ( $q_nick =~ /^all$/ ) {
                 my @keys = $redis->keys( '*' );
-                for my $key ( @keys ) {
-                    my @lis = $redis->lrange( $key, 0, -1 );
-                    my $value = join ', ', @lis;
-                    $reply = "$key => [ $value ]";
-                    $r->send_reply( $reply );
+                unless ( scalar @keys ) {
+                    $r->send_reply( "No one in any queue." );
+                }
+                else {
+                    for my $key ( @keys ) {
+                        my @lis = $redis->lrange( $key, 0, -1 );
+                        my $value = join ', ', @lis;
+                        $reply = "$key => [ $value ]";
+                        $r->send_reply( $reply );
+                    }
                 }
                 return;
             }
