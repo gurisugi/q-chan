@@ -49,6 +49,9 @@ AnySan->register_listener(
             }
 
             my ($q_nick, $method, $target_nick) = split ' ', $m;
+            $q_nick ||= '';
+            $method ||= '';
+            $target_nick ||= '';
 
             if ($method =~ /^show$/) {
                 my @res = $redis->lrange( $q_nick, 0, -1 );
@@ -56,8 +59,14 @@ AnySan->register_listener(
                 $reply = $q ? "$from_nick: $q_nick => [ $q ]" : "No one in $q_nick queue."
             }
             elsif ( $method =~ /^add$/ ) {
-                $redis->rpush( $q_nick, $from_nick );
-                $reply = "$from_nick: ok. $from_nick add to $q_nick queue.";
+                unless ( $target_nick ) {
+                    $redis->rpush( $q_nick, $from_nick );
+                    $reply = "$from_nick: ok. $from_nick add to $q_nick queue.";
+                }
+                else {
+                    $redis->rpush( $q_nick, $target_nick );
+                    $reply = "$from_nick: ok. $target_nick add to $q_nick queue.";
+                }
             }
             elsif ( $method =~ /^done$/ ) {
                 unless ( $target_nick ) {
