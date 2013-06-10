@@ -97,15 +97,7 @@ AnySan->register_listener(
                 return;
             }
             elsif ( $q_nick =~ /^help$/ ) {
-                my @usage = (
-                    'all : show all recent queue.',
-                    'target_nick add : add your nick to target_nick queue.',
-                    'target_nick show : show target_nick recent queue.',
-                    'target_nick done [nick in queue] : remove first nick or [nick in queue] from target_nick queue.'
-                );
-                for my $reply ( @usage ) {
-                    $r->send_reply( $reply );
-                }
+                $r->send_reply( "(*'-')つ https://github.com/gurisugi/q-chan" );
                 return;
             }
             else {
