@@ -88,7 +88,7 @@ AnySan->register_listener(
                 }
                 return;
             }
-            elsif ( $method =~ /^help$/ ) {
+            elsif ( $target_nick =~ /^help$/ ) {
                 my @usage = (
                     'all : show all recent queue.',
                     'target_nick add : add your nick to target_nick queue.',
