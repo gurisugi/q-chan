@@ -15,10 +15,7 @@ my $irc          = irc
     port          => $conf->{port},
     nickname      => $bot_nickname,
     password      => $conf->{password},
-    channels      => {
-        '#oppai'   => {},
-        '#nakamap' => {},
-    },
+    channels      => $conf->{channels},
     interval      => 0,
     on_disconnect => sub {
         warn 'disconnected!';
