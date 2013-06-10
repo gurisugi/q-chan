@@ -97,7 +97,7 @@ AnySan->register_listener(
                 return;
             }
             elsif ( $q_nick =~ /^help$/ ) {
-                $r->send_reply( "(*'-')つ https://github.com/gurisugi/q-chan" );
+                $r->send_reply( "(*'-')つ https://github.com/gurisugi/q-chan/blob/master/README.md" );
                 return;
             }
             else {
