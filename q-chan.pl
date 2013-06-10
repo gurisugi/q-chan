@@ -24,6 +24,7 @@ my $irc          = irc
     },
     enable_ssl => 1,
 ;
+$irc->join_channel('#oppai');
 
 my $redis = Redis->new(
     encoding  => undef,
