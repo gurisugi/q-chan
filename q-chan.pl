@@ -78,7 +78,7 @@ AnySan->register_listener(
                     $reply = "$from_nick: $target_nick not found in $q_nick queue.";
                 }
             }
-            elsif ( $target_nick =~ /^all$/ ) {
+            elsif ( $q_nick =~ /^all$/ ) {
                 my @keys = $redis->keys( '*' );
                 for my $key ( @keys ) {
                     my @lis = $redis->lrange( $key, 0, -1 );
@@ -88,7 +88,7 @@ AnySan->register_listener(
                 }
                 return;
             }
-            elsif ( $target_nick =~ /^help$/ ) {
+            elsif ( $q_nick =~ /^help$/ ) {
                 my @usage = (
                     'all : show all recent queue.',
                     'target_nick add : add your nick to target_nick queue.',
