@@ -38,23 +38,14 @@ AnySan->register_listener(
         cb => sub {
             my $r = shift;
             my $from_nick = $r->from_nickname;
+            say $r->message;
             my $message = ( $r->message );
             return unless $message =~ /^q_chan:/;
 
             my $reply;
             my $m = _parse_message( $message );
             unless ( $m ) {
-                my @keys = $redis->keys( '*' );
-                unless ( scalar @keys ) {
-                    $r->send_reply( "(*'-') None." );
-                    return;
-                }
-                for my $key ( @keys ) {
-                    my @lis = $redis->lrange( $key, 0, -1 );
-                    my $value = join ', ', @lis;
-                    $reply = "$key => [ $value ]";
-                    $r->send_reply( $reply );
-                }
+                $r->send_reply( "(*'-') やあ." );
                 return;
             }
 
@@ -87,8 +78,30 @@ AnySan->register_listener(
                     $reply = "$from_nick: $target_nick not found in $q_nick queue.";
                 }
             }
+            elsif ( $target_nick =~ /^all$/ ) {
+                my @keys = $redis->keys( '*' );
+                for my $key ( @keys ) {
+                    my @lis = $redis->lrange( $key, 0, -1 );
+                    my $value = join ', ', @lis;
+                    $reply = "$key => [ $value ]";
+                    $r->send_reply( $reply );
+                }
+                return;
+            }
+            elsif ( $method =~ /^help$/ ) {
+                my @usage = (
+                    'all : show all recent queue.',
+                    'target_nick add : add your nick to target_nick queue.',
+                    'target_nick show : show target_nick recent queue.',
+                    'target_nick done [nick in queue] : remove first nick or [nick in queue] from target_nick queue.'
+                );
+                for my $reply ( @usage ) {
+                    $r->send_reply( $reply );
+                }
+                return;
+            }
             else {
-                $reply = "$m |'-')?";
+                $reply = "$m |'-')? please see help.";
             }
 
             return unless $reply;
