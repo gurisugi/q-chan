@@ -38,7 +38,6 @@ AnySan->register_listener(
         cb => sub {
             my $r = shift;
             my $from_nick = $r->from_nickname;
-            say $r->message;
             my $message = ( $r->message );
             return unless $message =~ /^q_chan:/;
 
@@ -101,7 +100,7 @@ AnySan->register_listener(
                 return;
             }
             else {
-                $reply = "$m |'-')? please see help.";
+                $reply = "$m |'-')?";
             }
 
             return unless $reply;
