@@ -44,9 +44,7 @@ AnySan->register_listener(
 
             my $reply;
             my $m = _parse_message( $message );
-            unless ( $m ) {
-                $r->send_reply( "(*'-') やあ." );
-                return;
+                return unless $m;
             }
 
             my ($q_nick, $method, $target_nick) = split ' ', $m;
@@ -103,11 +101,11 @@ AnySan->register_listener(
                 return;
             }
             elsif ( $q_nick =~ /^help$/ ) {
-                $r->send_reply( "(*'-')つ https://github.com/gurisugi/q-chan/blob/master/README.md" );
+                $r->send_reply( "＿ﾉ乙(､ﾝ､)つ https://github.com/gurisugi/q-chan/blob/master/README.md" );
                 return;
             }
             else {
-                $reply = "$m |'-')?";
+                $reply = "$m ＿ﾉ乙(､ﾝ､)?";
             }
 
             return unless $reply;
