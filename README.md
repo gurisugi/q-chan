@@ -6,13 +6,13 @@
 
   * add _target_nick_ to _queue_nick_ queue
 
-    `q_chan: _queue_nick_ add [ _target_nick_ ]`
-  * show _target_nick_ recent queue
+    `qchan: add queue_nick target_nick`
+  * show _queue_nick_ recent queue
 
-    `q_chan: _queue_nick_ show`
-  * remove first nick or _target_nick_ from _queue_nick_ queue
+    `qchan: queue_nick show`
+  * remove first nick _queue_nick_ queue
 
-    `q_chan: _queue_nick_ done [ _target_nick_ ]`
+    `qchan: queue_nick done`
   * show all recent queue
 
-    `q_chan: all`
+    `qchan: all`
