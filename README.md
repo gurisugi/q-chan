@@ -1,12 +1,12 @@
 #q-chan
 
-みんなのqちゃん
+みんなのpちゃん
 
 ##Usage
 
   * add _target_nick_ to _queue_nick_ queue
 
-    `qchan: add queue_nick target_nick`
+    `qchan: add queue_nick targeっt_nick`
   * show _queue_nick_ recent queue
 
     `qchan: queue_nick show`
