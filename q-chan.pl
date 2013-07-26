@@ -97,7 +97,7 @@ sub cmd_all {
     my $redis = shift;
     my @keys = $redis->keys('*');
     my $reply = scalar @keys
-        ? join ', ', map { $_.' => ['.join( ', ', $redis->lrange($_, 0, -1) ).']' } @keys
+        ? join ', ', map { $_.' => [ '.join( ', ', $redis->lrange($_, 0, -1) ).' ]' } @keys
         : 'Nobody in any queue.';
     return $reply;
 }
@@ -113,7 +113,7 @@ sub cmd_show {
 
     my @queue_mem = $redis->lrange( $key_user, 0, -1 );
     my $reply = scalar @queue_mem
-        ? $key_user.' => ['.join( ', ', @queue_mem ).']'
+        ? $key_user.' => [ '.join( ', ', @queue_mem ).' ]'
         : 'Nobody in '.$key_user.' queue.';
     return $reply;
 }
