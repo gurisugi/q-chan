@@ -9,10 +9,10 @@
     `qchan: add queue_nick target_nick`
   * show _queue_nick_ recent queue
 
-    `qchan: queue_nick show`
+    `qchan: show queue_nick`
   * remove first nick _queue_nick_ queue
 
-    `qchan: queue_nick done`
+    `qchan: done queue_nick`
   * show all recent queue
 
     `qchan: all`
