@@ -10,7 +10,14 @@ use Config::PL;
 use Redis;
 use List::MoreUtils qw/any/;
 
-my $conf         = config_do 'config.pl';
+my $conf;
+if ( -e 'config_local.pl' ) {
+    $conf = config_do 'config_local.pl';
+}
+else {
+    $conf = config_do 'config.pl';
+}
+
 my $bot_nickname = 'qchan';
 my $irc          = irc
     $conf->{host},
