@@ -123,9 +123,20 @@ sub cmd_done {
     my $redis = shift;
     my ( $key_user, $target_user ) = @_;
 
-    my $res = $redis->lpop( $key_user );
-    my $reply = $res ? 'done success' : 'done failed';
+    my $reply;
+    if ( $target_user ) {
+        my @queue_mem = $redis->lrange( $key_user, 0, -1 );
+        return "'$target_user' not found"
+            unless ( any { $_ eq $target_user } @queue_mem );
+        my $res = $redis->lrem( $key_user, 0, $target_user );
+        $reply = $res ? 'done success' : 'done failed';
+    }
+    else {
+        my $res = $redis->lpop( $key_user );
+        $reply = $res ? 'done success' : 'done failed';
+    }
     return $reply;
+
 }
 
 sub cmd_add {
