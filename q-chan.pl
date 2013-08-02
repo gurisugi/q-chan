@@ -136,7 +136,6 @@ sub cmd_done {
         $reply = $res ? 'done success' : 'done failed';
     }
     return $reply;
-
 }
 
 sub cmd_add {
