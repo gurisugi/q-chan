@@ -56,12 +56,14 @@ AnySan->register_listener(
             my ( $method, @args ) = split ' ', $m;
 
             if ( _is_valid_method( $method ) ) {
-                $reply = eval 'cmd_'.$method.'( $redis, @args )';
-                $r->send_reply( $reply );
+                my ($reply, $as_msg) = eval 'cmd_'.$method.'( $redis, @args )';
+                $as_msg
+                    ? $irc->send_message( $reply, channel => $r->{attribute}{channel}, privmsg => 'PRIVMSG' )
+                    : $r->send_reply( $reply );
                 return;
             }
             else {
-                $r->send_reply( '＿ﾉ乙(､ﾝ､)つ'."'".$method."'".'？' );
+                $r->send_reply( $from_nick.': ＿ﾉ乙(､ﾝ､)つ'."'".$method."'".'？' );
                 return;
             }
         }
@@ -103,11 +105,21 @@ sub _is_valid_method {
 
 sub cmd_all {
     my $redis = shift;
+
     my @keys = $redis->keys('*');
-    my $reply = scalar @keys
-        ? join ', ', map { $_.' => [ '.join( ', ', $redis->lrange($_, 0, -1) ).' ]' } @keys
-        : 'Nobody in any queue.';
-    return $reply;
+    @keys = grep { $redis->type( $_ ) eq 'list' } @keys;
+
+    my $as_msg = undef;
+    my $reply;
+    if ( scalar @keys ) {
+        $reply  = join ', ', map { $_.' => [ '.join( ', ', $redis->lrange($_, 0, -1) ).' ]' } @keys;
+        $as_msg = 1;
+    }
+    else {
+        $reply = 'Nobody in any queue.';
+    }
+
+    return $reply, $as_msg;
 }
 
 sub cmd_help {
@@ -119,11 +131,19 @@ sub cmd_show {
     my $redis = shift;
     my ( $key_user ) = @_;
 
-    my @queue_mem = $redis->lrange( $key_user, 0, -1 );
-    my $reply = scalar @queue_mem
-        ? $key_user.' => [ '.join( ', ', @queue_mem ).' ]'
-        : 'Nobody in '.$key_user.' queue.';
-    return $reply;
+    my $as_msg = undef;
+    my $reply;
+
+    if ( $redis->type( $key_user ) eq 'list' ) {
+        my @queue_mem = $redis->lrange( $key_user, 0, -1 );
+        $reply        = $key_user.' => [ '.join( ', ', @queue_mem ).' ]';
+        $as_msg       = 1;
+    }
+    else {
+        $reply = 'Nobody in '.$key_user.' queue.';
+    }
+
+    return $reply, $as_msg;
 }
 
 sub cmd_done {
